@@ -25,6 +25,7 @@ namespace SoulsGame
 
         [Header("Movement Stats")]
         [SerializeField] float movementSpeed = 5;
+        [SerializeField] float walkingSpeed = 3;
         [SerializeField] float sprintSpeed = 7;
         [SerializeField] float rotationSpeed = 10;
         [SerializeField] float fallingSpeed = 45;
@@ -87,7 +88,7 @@ namespace SoulsGame
 
             float speed = movementSpeed;
 
-            if( inputHandler.sprintFlag )
+            if( inputHandler.sprintFlag && inputHandler.moveAmount > 0.5 )
             {
                 speed = sprintSpeed;
                 playerManager.isSprinting = true;
@@ -95,7 +96,16 @@ namespace SoulsGame
             }
             else
             {
-                 moveDirection *= speed;
+                if( inputHandler.moveAmount < 0.5 )
+                {
+                    moveDirection *= walkingSpeed;
+                    playerManager.isSprinting = false;
+                }
+                else
+                {
+                    moveDirection *= speed;
+                    playerManager.isSprinting = false;
+                }           
             }
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane( moveDirection, normalVector );
@@ -180,7 +190,7 @@ namespace SoulsGame
                     }
                     else
                     {
-                        animationHandler.PlayerTargetAnimation("Locomotion", true);
+                        animationHandler.PlayerTargetAnimation("Empty", true);
                         inAirTimer = 0;
                     }
 

@@ -10,6 +10,7 @@ namespace SoulsGame
         public Animator anim;
         InputHandler inputHandler;
         PlayerLocomotion playerLocomotion;
+
         int vertical;
         int horizontal;
         public bool canRotate;
@@ -97,9 +98,13 @@ namespace SoulsGame
 
         public void PlayerTargetAnimation( string targetAnim, bool isInteracting )
         {
+
+            if( playerManager.isInteracting ) return;
+
             anim.applyRootMotion = isInteracting;
             anim.SetBool( "isInteracting", isInteracting );
             anim.CrossFade( targetAnim, 0.0f );
+            
         }
         
         private void OnAnimatorMove() 
